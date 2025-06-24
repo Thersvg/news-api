@@ -10,7 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { PostDTO, PostUpdateDTO } from './dtos/post.dto';
+import { PaginationDTO, PostDTO, PostUpdateDTO } from './dtos/post.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PostService } from './post.service';
 
@@ -43,8 +43,13 @@ export class PostController {
   }
 
   @Get()
-  async getPosts() {
-    return this.postService.getPosts();
+  async getPosts(@Query() query: PaginationDTO) {
+    return this.postService.getPosts(Number(query.page), Number(query.limit));
+  }
+
+  @Get('by-user')
+  async getPostsByIdUser(@Req() req: { user: { id: number | string } }) {
+    return this.postService.getPostsByIdUser(Number(req.user.id));
   }
 
   @Get(':id')
@@ -56,4 +61,6 @@ export class PostController {
   async getPostsByCategory(@Query('categoryid') categoryId: number) {
     return await this.postService.getPostsByCategory(Number(categoryId));
   }
+
+  //BUSCAR POST POR PAGINAÇÃO
 }

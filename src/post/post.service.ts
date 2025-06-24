@@ -71,8 +71,24 @@ export class PostService {
     return { message: 'Post removido com sucesso' };
   }
 
-  async getPosts() {
-    return await this.prismaService.post.findMany();
+  async getPosts(page: number, limit: number) {
+    const [posts, total] = await Promise.all([
+      this.prismaService.post.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prismaService.post.count(),
+    ]);
+
+    return {
+      data: posts,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      },
+    };
   }
 
   async getPostById(postId: number) {
@@ -100,6 +116,18 @@ export class PostService {
       where: {
         category_id: categoryId,
         published: true,
+      },
+      include: {
+        category: true,
+        author: true,
+      },
+    });
+  }
+
+  async getPostsByIdUser(userId: number) {
+    return await this.prismaService.post.findMany({
+      where: {
+        author_id: userId,
       },
       include: {
         category: true,

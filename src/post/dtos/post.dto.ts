@@ -32,3 +32,8 @@ export class PostUpdateDTO {
   @IsString()
   image: string;
 }
+
+export class PaginationDTO {
+  page: number;
+  limit: number;
+}

@@ -66,7 +66,14 @@ export class AuthService {
       email: userAlreadyExist.email,
     });
 
-    return { accessToken: accessToken };
+    return {
+      accessToken: accessToken,
+      userData: {
+        name: userAlreadyExist.name,
+        role: userAlreadyExist.role,
+        email: userAlreadyExist.email,
+      },
+    };
   }
 
   async remove(id: number) {
