@@ -61,6 +61,4 @@ export class PostController {
   async getPostsByCategory(@Query('categoryid') categoryId: number) {
     return await this.postService.getPostsByCategory(Number(categoryId));
   }
-
-  //BUSCAR POST POR PAGINAÇÃO
 }
