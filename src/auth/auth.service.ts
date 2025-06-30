@@ -91,6 +91,8 @@ export class AuthService {
       throw new UnauthorizedException('Usuário inexistente');
     }
 
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
     return await this.prismaService.user.updateMany({
       where: {
         id: id,
@@ -99,7 +101,7 @@ export class AuthService {
         name: data.name,
         role: data.role,
         email: data.email,
-        password: data.password,
+        password: hashedPassword,
       },
     });
   }
