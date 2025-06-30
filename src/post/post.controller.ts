@@ -61,4 +61,9 @@ export class PostController {
   async getPostsByCategory(@Query('categoryid') categoryId: number) {
     return await this.postService.getPostsByCategory(Number(categoryId));
   }
+
+  @Get(':slug')
+  async GetPostBySlug(@Param('slug') slug: string) {
+    return await this.postService.getPostBySlug(slug);
+  }
 }

@@ -135,4 +135,18 @@ export class PostService {
       },
     });
   }
+
+  async getPostBySlug(slug: string) {
+    const postSlug = await this.prismaService.post.findFirst({
+      where: {
+        slug: slug,
+      },
+    });
+
+    if (!postSlug) {
+      throw new NotFoundException('Publicação não encontrada');
+    }
+
+    return postSlug;
+  }
 }
