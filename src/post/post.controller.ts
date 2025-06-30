@@ -46,11 +46,16 @@ export class PostController {
   async getPosts(@Query() query: PaginationDTO) {
     return this.postService.getPosts(Number(query.page), Number(query.limit));
   }
-  
+
   @UseGuards(AuthGuard)
   @Get('by-user')
   async getPostsByIdUser(@Req() req: { user: { id: number | string } }) {
     return this.postService.getPostsByIdUser(Number(req.user.id));
+  }
+
+  @Get(':slug')
+  async GetPostBySlug(@Param('slug') slug: string) {
+    return await this.postService.getPostBySlug(slug);
   }
 
   @Get(':id')
@@ -61,10 +66,5 @@ export class PostController {
   @Get()
   async getPostsByCategory(@Query('categoryid') categoryId: number) {
     return await this.postService.getPostsByCategory(Number(categoryId));
-  }
-
-  @Get(':slug')
-  async GetPostBySlug(@Param('slug') slug: string) {
-    return await this.postService.getPostBySlug(slug);
   }
 }
