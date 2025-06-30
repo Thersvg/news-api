@@ -14,11 +14,11 @@ import { PaginationDTO, PostDTO, PostUpdateDTO } from './dtos/post.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PostService } from './post.service';
 
-@UseGuards(AuthGuard)
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}
 
+  @UseGuards(AuthGuard)
   @Post(':id')
   async create(
     @Req() req: { user: { id: number | string } },
@@ -31,12 +31,12 @@ export class PostController {
       data,
     );
   }
-
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(@Param('id') postId: number, @Body() data: PostUpdateDTO) {
     return await this.postService.update(Number(postId), data);
   }
-
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async delete(@Param('id') postId: number) {
     return this.postService.delete(Number(postId));
@@ -46,7 +46,8 @@ export class PostController {
   async getPosts(@Query() query: PaginationDTO) {
     return this.postService.getPosts(Number(query.page), Number(query.limit));
   }
-
+  
+  @UseGuards(AuthGuard)
   @Get('by-user')
   async getPostsByIdUser(@Req() req: { user: { id: number | string } }) {
     return this.postService.getPostsByIdUser(Number(req.user.id));
