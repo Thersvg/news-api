@@ -21,3 +21,11 @@ export class SigninDTO {
   @IsNotEmpty()
   password: string;
 }
+
+export class EditDTO {
+  name: string;
+  role: string;
+  @IsEmail()
+  email: string;
+  password: string;
+}

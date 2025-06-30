@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { SigninDTO, SignupDTO } from './dtos/auth.dto';
+import { EditDTO, SigninDTO, SignupDTO } from './dtos/auth.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -74,6 +74,34 @@ export class AuthService {
         email: userAlreadyExist.email,
       },
     };
+  }
+
+  async users() {
+    return await this.prismaService.user.findMany();
+  }
+
+  async editUser(id: number, data: EditDTO) {
+    const userAlreadyExist = await this.prismaService.user.findMany({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!userAlreadyExist) {
+      throw new UnauthorizedException('Usuário inexistente');
+    }
+
+    return await this.prismaService.user.updateMany({
+      where: {
+        id: id,
+      },
+      data: {
+        name: data.name,
+        role: data.role,
+        email: data.email,
+        password: data.password,
+      },
+    });
   }
 
   async remove(id: number) {
